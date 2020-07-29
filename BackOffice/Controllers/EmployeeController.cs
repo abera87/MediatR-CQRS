@@ -12,7 +12,7 @@ namespace BackOffice.Controllers
     [Route("[Controller]")]
     public class EmployeeController : ControllerBase
     {
-                private readonly IMediator mediator;
+        private readonly IMediator mediator;
 
         public EmployeeController(IMediator mediator)
         {

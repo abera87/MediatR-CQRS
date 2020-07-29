@@ -1,24 +1,32 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using BackOffice.Model;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using BackOffice.Queries;
+using BackOffice.ViewModel;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackOffice.Handlers.QueryHandlers
 {
-    public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeeQuery, List<Employee>>
+    public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeeQuery, List<EmployeeViewModel>>
     {
         private readonly BackOfficeDBContext dBContext;
+        private readonly IMapper mapper;
 
-        public GetAllEmployeeQueryHandler(BackOfficeDBContext dBContext)
+        public GetAllEmployeeQueryHandler(BackOfficeDBContext dBContext,IMapper mapper)
         {
             this.dBContext = dBContext;
+            this.mapper = mapper;
         }
-        public async Task<List<Employee>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
+        public async Task<List<EmployeeViewModel>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
         {
-            return await dBContext.Employee.ToListAsync();
+            //return await dBContext.Employee.ToListAsync();
+
+            return await dBContext.Employee
+                            .ProjectTo<EmployeeViewModel>(mapper.ConfigurationProvider)
+                            .ToListAsync();
         }
     }
 }

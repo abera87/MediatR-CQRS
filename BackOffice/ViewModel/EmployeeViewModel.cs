@@ -1,6 +1,6 @@
-namespace BackOffice.Model
+namespace BackOffice.ViewModel
 {
-    public partial class Employee
+     public partial class EmployeeViewModel
     {
         public int EmployeeId { get; set; }
         public int? EmpId { get; set; }
@@ -8,6 +8,6 @@ namespace BackOffice.Model
         public string Address { get; set; }
         public string Phone { get; set; }
 
-        public string NameWithId() => $"{Name} ({EmpId})";
+        public string NameWithId { get; set; }
     }
 }

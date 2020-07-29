@@ -1,9 +1,9 @@
-using BackOffice.Model;
+using BackOffice.ViewModel;
 using MediatR;
 
 namespace BackOffice.Queries
 {
-    public class GetEmployeeByIdQuery : IRequest<Employee>
+    public class GetEmployeeByIdQuery : IRequest<EmployeeViewModel>
     {
         public int empId;
 
