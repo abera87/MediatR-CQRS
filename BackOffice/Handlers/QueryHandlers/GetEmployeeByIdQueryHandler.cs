@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using BackOffice.Common.Exceptions;
 using BackOffice.Queries;
 using BackOffice.ViewModel;
 using MediatR;
@@ -22,10 +23,16 @@ namespace BackOffice.Handlers.QueryHandlers
         }
         public async Task<EmployeeViewModel> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
         {
-            return await dBContext.Employee
+            var result = await dBContext.Employee
                             .Where(x => x.EmpId == request.empId)
                             .ProjectTo<EmployeeViewModel>(mapper.ConfigurationProvider)
                             .FirstOrDefaultAsync();
+            if (result == null)
+            {
+                throw new NotFoundException(nameof(EmployeeViewModel), request.empId);
+            }
+
+            return result;
         }
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BackOffice.Common.Behaviours;
+using BackOffice.Common.Filters;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,10 +37,15 @@ namespace BackOffice
                 options.UseSqlServer(DBConnectionString)
             );
 
-            services.AddControllers();
+            services.AddControllers(options =>
+                options.Filters.Add(new ApiExceptionFilter())
+            );
 
             services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
             services.AddMediatR(typeof(Startup));
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
